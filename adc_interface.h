@@ -1,26 +1,65 @@
 /********************************************************************/
 /********************************************************************/
 /**************       Author : Moahmed A Shaheen     *****************/
-/**************       Layer : MCAL                  *****************/
+/**************       Layer :  MCAL                  *****************/
 /**************       SWC:     ADC_INTERFACE_H_     *****************/
 /**************       Version : 1.0                 *****************/
-/**************       Date : 30/12/2021              *****************/
+/**************       Date :   7/11/2021              *****************/
 
 #ifndef ADC_INTERFACE_H_
 #define ADC_INTERFACE_H_
 
-#define adc_ch_0 0
-#define adc_ch_1 1
-#define adc_ch_2 2
-#define adc_ch_3 3
-#define adc_ch_4 4
-#define adc_ch_5 5
-#define adc_ch_6 6
-#define adc_ch_7 7
-#define adc_ch_8 8
 
+/*Functon Prototypes *******************************************/
+/*
+* Description : This function is used to initialize the ADC
+* Parameters  : void
+* Return      : void
+*/
 
-void adc_init(void);
-u16 adc_read(u8 channel);
+void ADC_voidInit(void);
+
+/*Functon Prototypes *******************************************/
+/*
+* Description : This function is used to read value form channnel Synchronous
+* Parameters  :  select one of this channel:
+                ADC_CHANNEL_0 
+*               ADC_CHANNEL_1 
+*               ADC_CHANNEL_2 
+*               ADC_CHANNEL_3 
+*               ADC_CHANNEL_4 
+*               ADC_CHANNEL_5 
+*               ADC_CHANNEL_6 
+*               ADC_CHANNEL_7 
+*               ADC_CHANNEL_8 
+*
+*
+* Return      : u16 :reading value
+*/
+
+uint16 ADC_u16ReadChannelSync(uint8 Copy_u8Channel);
+
+/*Functon Prototypes *******************************************/
+/*
+* Description : This function is used to read value form channnel Asynchronous
+* Parameters  : 1. select one of this channel:
+                ADC_CHANNEL_0 
+*               ADC_CHANNEL_1 
+*               ADC_CHANNEL_2 
+*               ADC_CHANNEL_3 
+*               ADC_CHANNEL_4 
+*               ADC_CHANNEL_5 
+*               ADC_CHANNEL_6 
+*               ADC_CHANNEL_7 
+*               ADC_CHANNEL_8 
+
+              2. address of Notification function "pointer to fun"
+*
+*
+* Return      : void
+*/
+
+void ADC_voidReadChannelAsync(uint8 Copy_u8Channel, void (* notification_fun)());
+
 
 #endif /* ADC_INTERFACE_H_ */

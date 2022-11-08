@@ -7,41 +7,74 @@
 /**************       Date : 30/12/2021              *****************/
 
 
-#include "bit_cal.h"
-#include "std_types.h"
-#include "adc_private.h"
+#include "BIT_MATH.h"
+#include "STD_TYPES.h"
+#include "ADC_register.h"
+#include "ADC_private.h"
+#include "ADC_config.h"
 #include "adc_interface.h"
 
 
-void adc_init(void){
-	set_bit(adcsra,0);      /* prescales = 128 */
-	set_bit(adcsra,1);
-	set_bit(adcsra,2);
-
-    clear_bit(admux,7); /*  refrence voltages = 5v */
-    set_bit(admux,6);
-
-
-    set_bit(admux,5);   /* left adjustment*/
-
-
-    set_bit(adcsra,7); /* adc enable */
+void ADC_voidInit(void){
+	/* V Reference Selection Bits*/
+	#if REFRENCE_SELECTION    AREF_OFF
+	   CLR_BIT(ADMUX ,ADMUX_REFS0);
+	   CLR_BIT(ADMUX ,ADMUX_REFS1);
+	   
+	#elif REFRENCE_SELECTION  AVCC
+	   SET_BIT(ADMUX ,ADMUX_REFS0);
+	   CLR_BIT(ADMUX ,ADMUX_REFS1);
+	#elif REFRENCE_SELECTION  RESERVED
+	   CLR_BIT(ADMUX ,ADMUX_REFS0);
+	   SET_BIT(ADMUX ,ADMUX_REFS1);
+	#elif REFRENCE_SELECTION  INTERNAL_2V56
+	   SET_BIT(ADMUX ,ADMUX_REFS0);
+	   SET_BIT(ADMUX ,ADMUX_REFS1);
+	#endif
+	
+	/* ADC Adjust*/
+	#if ADC_ADJUST      LEFT_ADJUST
+	    SET_BIT(ADMUX, ADLAR);
+	#elif ADC_ADJUST    RIGHT_ADJUST
+	    CLR_BIT(ADMUX, ADLAR);
+	#endif
+	
+	/* Select Prescaler */
+	ADCSRA &=ADC_PRESCALER_MASK;
+	ADCSRA |=ADC_PRESCALER_SELECTION;
+	
+	#if OP_MODE  INTERRUPT_ASYNCH
+	   SET_BIT(ADCSRA,ADIE);
+	#endif
+	  
+	 /* ADC Peripheral ENABLE */
+	 SET_BIT(ADCSRA ,ADEN);
 }
 
 
 
 
-u16 adc_read(u8 channel){
+uint16 ADC_u16ReadChannelSync(uint8 Copy_u8Channel){
+    
+	/* SELECT CHANNEL */
+	ADMUX &= ADC_CHANNEL_MASK;
+	ADMUX |= Copy_u8Channel;
+	
+	 /* start convresion */
+	SET_BIT(ADCSRA,ADSC);
+	
+	/*WAIT until conversion complete*/
+	while((GET_BIT(ADCSRA,ADIF))==0);
+	
+	/*clear flag*/
+	SET_BIT(ADCSRA,ADIF);
+	
+	uint16 Local_u16Reading = ADCL >>6 ;
+	Local_u16Reading |= (ADCH<<2);
 
-	admux &= 0b11100000;
-	admux |= channel;
-	set_bit(adcsra,6); /* start convresion */
-	while((get_bit(adcsra,4))==0);
-	set_bit(adcsra,4);
-	u16 res = adcl >>6 ;
-	res |= (adch<<2);
-
-	return res ;
+	return Local_u16Reading ;
+	
+	/*return ADC; */      // ADC  pointer to 16  (adcl , adch)
 
 }
 
