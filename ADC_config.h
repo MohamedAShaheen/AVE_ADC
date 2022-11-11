@@ -37,6 +37,8 @@ DIVBY_64
 DIVBY_128*/
 #define  ADC_PRESCALER_SELECTION              DIVBY_128
 
+#define ADC_CONVERSION_TIME_OUT                      10000000
+ 
 
 
 #endif 

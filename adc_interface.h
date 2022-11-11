@@ -37,7 +37,7 @@ void ADC_voidInit(void);
 * Return      : u16 :reading value
 */
 
-uint16 ADC_u16ReadChannelSync(uint8 Copy_u8Channel);
+ERROR_STATE ADC_u16ReadChannelSync(uint8 Copy_u8Channel  ,uint16* Copy_u16Reading );
 
 /*Functon Prototypes *******************************************/
 /*
@@ -52,14 +52,14 @@ uint16 ADC_u16ReadChannelSync(uint8 Copy_u8Channel);
 *               ADC_CHANNEL_6 
 *               ADC_CHANNEL_7 
 *               ADC_CHANNEL_8 
-
-              2. address of Notification function "pointer to fun"
+              2. pointer to uint16 reading 
+              3. pointer to Notification function "pointer to fun"
 *
 *
 * Return      : void
 */
 
-void ADC_voidReadChannelAsync(uint8 Copy_u8Channel, void (* notification_fun)());
+ERROR_STATE ADC_voidReadChannelAsync(uint8 Copy_u8Channel ,uint16* Copy_pu16Reading , void (* Copy_pvNotificationFun)(void));
 
 
 #endif /* ADC_INTERFACE_H_ */

@@ -10,6 +10,9 @@
 #ifndef ADC_PRIVATE_H_
 #define ADC_PRIVATE_H_
 
+typedef enum error_state{ OK ,NOK } ERROR_STATE;
+
+
 /* Voltage Refrence Selection */
 #define  AREF_OFF                1             // Internal Vref turned off
 #define  AVCC                    2             //AVCC with external capacitor at AREF pin
