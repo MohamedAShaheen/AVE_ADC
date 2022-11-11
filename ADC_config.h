@@ -6,6 +6,7 @@
 /**************       Version : 1.0                 *****************/
 /**************       Date :   8/11/2021              *****************/
 
+/* HERE USER CAN CHANGE THE CONFIGRATION OF ADC */
 
 #ifndef ADC_CONFIG_H_
 #define ADC_CONFIG_H_
